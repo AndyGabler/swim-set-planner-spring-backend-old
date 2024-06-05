@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SwimSetRepository extends JpaRepository<SwimSet, Long> {
 
-    SwimSet getByName(String name);
+    SwimSet findByName(String name);
 }

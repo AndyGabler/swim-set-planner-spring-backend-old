@@ -1,6 +1,6 @@
-package io.github.andygabler.swimsetplannerbackend.swimset;
+package io.github.andygabler.swimsetplannerbackend.calendar;
 
-import io.github.andygabler.swimsetplannerbackend.model.SwimSet;
+import io.github.andygabler.swimsetplannerbackend.model.ScheduledSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,25 +8,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
-public class SwimSetController {
+public class ScheduledSetController {
 
     @Autowired
-    SwimSetService swimSetService;
+    ScheduledSetService scheduledSetService;
 
-    @GetMapping("/swimsets")
-    public ResponseEntity<?> getSwimSets(
+    @GetMapping("/setschedule")
+    public ResponseEntity<?> getScheduledSet(
         @RequestParam(required = false)
-        String name,
+        String swimSetName,
         @RequestParam(required = false)
-        Long id
+        Long swimSetId,
+        @RequestParam(required = false)
+        Date scheduledDate
     ) {
-        List<SwimSet> sets;
+        List<ScheduledSet> sets;
 
         try {
-            sets = swimSetService.getSwimSet(name, id);
+            sets = scheduledSetService.getScheduledSets(swimSetName, swimSetId, scheduledDate);
         } catch (IllegalArgumentException exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -35,7 +38,6 @@ public class SwimSetController {
             return new ResponseEntity<>(sets, HttpStatus.NOT_FOUND);
         }
 
-        sets.forEach(set -> set.setLabels(set.getLabelText().split(",")));
         return new ResponseEntity<>(sets, HttpStatus.OK);
     }
 }

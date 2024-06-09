@@ -1,5 +1,7 @@
 import sqlite3
-data = [
+from datetime import date
+
+swim_sets = [
 	{
         "id": 1,
         "repLength": 150,
@@ -207,14 +209,115 @@ data = [
         "name": "10x50s breast kick alternate legs",
         "description": "10 reps of 50 yards of breast stroke kick. Only use one leg per lap, each lap, change the leg being used.",
         "labels": "Legs"
+    },
+    {
+        "id": 27,
+        "repLength": 100,
+        "repCount": 10,
+        "name": "10x100s IM",
+        "description": "10 reps of 100 yards of IM. This means 25 yards of butterfly, then back stroke, then breast stroke, then freestyle. This is a good warm up set.",
+        "labels": "Full Body,Endurance,Warmup"
+    },
+]
+
+set_occurences = [
+    {
+        "id": 1,
+        "dateScheduled": date(year=2024, month=6, day=3),
+        "order": 1,
+        "scheduledSetId": 12
+    },
+    {
+        "id": 2,
+        "dateScheduled": date(year=2024, month=6, day=3),
+        "order": 2,
+        "scheduledSetId": 1
+    },
+    {
+        "id": 3,
+        "dateScheduled": date(year=2024, month=6, day=3),
+        "order": 3,
+        "scheduledSetId": 3
+    },
+    {
+        "id": 4,
+        "dateScheduled": date(year=2024, month=6, day=3),
+        "order": 4,
+        "scheduledSetId": 21
+    },
+    {
+        "id": 5,
+        "dateScheduled": date(year=2024, month=6, day=4),
+        "order": 1,
+        "scheduledSetId": 12
+    },
+    {
+        "id": 6,
+        "dateScheduled": date(year=2024, month=6, day=4),
+        "order": 2,
+        "scheduledSetId": 27
+    },
+    {
+        "id": 7,
+        "dateScheduled": date(year=2024, month=6, day=4),
+        "order": 3,
+        "scheduledSetId": 21
+    },
+    {
+        "id": 8,
+        "dateScheduled": date(year=2024, month=6, day=5),
+        "order": 1,
+        "scheduledSetId": 12
+    },
+    {
+        "id": 9,
+        "dateScheduled": date(year=2024, month=6, day=5),
+        "order": 2,
+        "scheduledSetId": 2
+    },
+    {
+        "id": 10,
+        "dateScheduled": date(year=2024, month=6, day=5),
+        "order": 3,
+        "scheduledSetId": 20
+    },
+    {
+        "id": 11,
+        "dateScheduled": date(year=2024, month=6, day=5),
+        "order": 4,
+        "scheduledSetId": 21
+    },
+    {
+        "id": 12,
+        "dateScheduled": date(year=2024, month=6, day=7),
+        "order": 1,
+        "scheduledSetId": 12
+    },
+    {
+        "id": 13,
+        "dateScheduled": date(year=2024, month=6, day=7),
+        "order": 2,
+        "scheduledSetId": 3
+    },
+    {
+        "id": 14,
+        "dateScheduled": date(year=2024, month=6, day=7),
+        "order": 3,
+        "scheduledSetId": 9
+    },
+    {
+        "id": 15,
+        "dateScheduled": date(year=2024, month=6, day=7),
+        "order": 4,
+        "scheduledSetId": 20
     }
 ]
 
 conn = sqlite3.connect('C:/Users/andre/Desktop/Stuff/sqlite-tools-win-x64-3460000/swim-set.db')
 cursor = conn.cursor()
 
-for entry in data:
-    # Insert the data into the table
+for entry in swim_sets:
+    # Insert the swim sets
     cursor.execute(
         'INSERT INTO Swim_Set (ID, REP_LENGTH, REP_COUNT, NAME, DESCRIPTION, LABEL_TEXT) VALUES (?, ?, ?, ?, ?, ?);', 
         (entry["id"],
@@ -224,8 +327,25 @@ for entry in data:
         entry["description"],
         entry["labels"])
     )
+    conn.commit()
 
-    # Commit the changes
+for entry in set_occurences:
+    #date_scheduled date, 
+    #set_order integer, 
+    #id bigint not null, 
+    #scheduled_set_id bigint,
+    cursor.execute(
+        """
+        INSERT INTO Scheduled_Set
+        (ID, Date_Scheduled, Set_Order, Scheduled_Set_Id)
+        VALUES
+        (?, ?, ?, ?)
+        """,
+        (
+            entry["id"], str(entry["dateScheduled"]) + " 00:00:00.0000", 
+            entry["order"], entry["scheduledSetId"]
+        )
+    )
     conn.commit()
 
 conn.close()

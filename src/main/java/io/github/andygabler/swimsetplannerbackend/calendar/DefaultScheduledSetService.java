@@ -20,7 +20,7 @@ public class DefaultScheduledSetService implements ScheduledSetService {
     ScheduledSetRepository scheduledSetRepository;
 
     @Override
-    public List<ScheduledSet> getScheduledSets(String swimSetName, Long swimSetId, Date scheduledDate) {
+    public List<ScheduledSet> getScheduledSets(String swimSetName, Long swimSetId, String scheduledDate) {
         SwimSet swimSet = null;
 
         if (swimSetName != null || swimSetId != null) {
@@ -47,6 +47,7 @@ public class DefaultScheduledSetService implements ScheduledSetService {
             results = scheduledSetRepository.findAll();
         }
 
+        results.forEach(set -> set.getScheduledSet().setLabels(set.getScheduledSet().getLabelText().split(",")));
         return results;
     }
 }

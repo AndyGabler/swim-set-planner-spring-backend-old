@@ -342,7 +342,7 @@ for entry in set_occurences:
         (?, ?, ?, ?)
         """,
         (
-            entry["id"], str(entry["dateScheduled"]) + " 00:00:00.0000", 
+            entry["id"], str(entry["dateScheduled"]), 
             entry["order"], entry["scheduledSetId"]
         )
     )

@@ -3,8 +3,6 @@ package io.github.andygabler.swimsetplannerbackend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Date;
-
 @Entity
 @Data
 @Table(
@@ -21,7 +19,7 @@ public class ScheduledSet {
     private long id;
 
     @Column(name = "DATE_SCHEDULED")
-    private Date dateScheduled;
+    private String dateScheduled;
 
     @Column(name = "SET_ORDER")
     private int order;
